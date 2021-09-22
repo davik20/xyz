@@ -1,0 +1,22 @@
+.hover {
+  transition: all 0.2s;
+}
+
+.hover:hover {
+  transform: scale(1.08);
+}
+
+.hover:active {
+  transform: scale(1);
+}
+
+.spin {
+  animation-name: spinner;
+  animation-duration: 0.3s;
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(180deg);
+  }
+}
