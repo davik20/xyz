@@ -12,6 +12,22 @@ import {
   Fraction as FractionEth,
   Rounding as RoundingEth,
 } from "@uniswap/sdk";
+
+import {
+  ChainId as ChainIdPancake,
+  WETH as BasePancake,
+  Fetcher as FetcherPancake,
+  Route as RoutePancake,
+  Trade as TradePancake,
+  TokenAmount as TokenAmountPancake,
+  TradeType as TradeTypePancake,
+  Currency as CurrencyPancake,
+  Token as TokenPancake,
+  Percent as PercentPancake,
+  Fraction as FractionPancake,
+  Rounding as RoundingPancake,
+} from "../dependencies/pancake-swap-sdk/src";
+
 import {
   ChainId as ChainIdAvax,
   WAVAX as BaseWavax,
@@ -29,6 +45,7 @@ import {
 
 import { ethers } from "ethers";
 import { mapHexToNumber } from "./swap";
+import { RouterSdk } from "../classes/RouterSdkClass";
 
 export interface UniswapSdkInterface {
   ChainId: typeof ChainIdEth;
@@ -59,20 +76,20 @@ export interface PangolinSdkInterface {
   Rounding: typeof RoundingAvax;
 }
 
-const uniswapSdk: UniswapSdkInterface = {
-  ChainId: ChainIdEth,
-  WETH: BaseWETH,
-  Fetcher: FetcherEth,
-  Route: RouteEth,
-  Trade: TradeEth,
-  TokenAmount: TokenAmountEth,
-  TradeType: TradeTypeEth,
-  Currency: CurrencyEth,
-  Token: TokenEth,
-  Percent: PercentEth,
-  Fraction: FractionEth,
-  Rounding: RoundingEth,
-};
+// const uniswapSdk: UniswapSdkInterface = {
+//   ChainId: ChainIdEth,
+//   WETH: BaseWETH,
+//   Fetcher: FetcherEth,
+//   Route: RouteEth,
+//   Trade: TradeEth,
+//   TokenAmount: TokenAmountEth,
+//   TradeType: TradeTypeEth,
+//   Currency: CurrencyEth,
+//   Token: TokenEth,
+//   Percent: PercentEth,
+//   Fraction: FractionEth,
+//   Rounding: RoundingEth,
+// };
 
 const pangolinSdk: PangolinSdkInterface = {
   ChainId: ChainIdAvax,
@@ -89,9 +106,39 @@ const pangolinSdk: PangolinSdkInterface = {
   Rounding: RoundingAvax,
 };
 
+const uniswapSdk = new RouterSdk(
+  ChainIdEth,
+  BaseWETH,
+  FetcherEth,
+  RouteEth,
+  TradeEth,
+  TokenAmountEth,
+  TradeTypeEth,
+  CurrencyEth,
+  TokenEth,
+  PercentEth,
+  FractionEth,
+  RoundingEth
+);
+const pancakeSdk = new RouterSdk(
+  ChainIdPancake,
+  BasePancake,
+  FetcherPancake,
+  RoutePancake,
+  TradePancake,
+  TokenAmountPancake,
+  TradeTypePancake,
+  CurrencyPancake,
+  TokenPancake,
+  PercentPancake,
+  FractionPancake,
+  RoundingPancake
+);
+
 const sdks: any = {
   "0x1": {
     uniswap: uniswapSdk,
+    // pangolin: pangolinSdk,
   },
   "0x3": {
     uniswap: uniswapSdk,
@@ -102,12 +149,14 @@ const sdks: any = {
   "0xa86a": {
     pangolin: pangolinSdk,
   },
+  "0x38": {
+    pancake: pancakeSdk,
+  },
 };
 
 export const getSDK = (chainId: any, dex: any) => {
-  if (chainId && dex) {
-    console.log(chainId, dex);
-    return sdks[chainId][dex];
+  if (chainId) {
+    return sdks[chainId];
   }
 };
 

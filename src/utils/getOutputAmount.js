@@ -94,7 +94,6 @@ import { amountToWei } from "./swap";
 //         const fraction = new Fraction(
 //           outputAmount[0].numerator,
 //           outputAmount[0].denominator
-//         );
 //         const output = fraction.toSignificant(6);
 
 //         return output;
@@ -115,15 +114,17 @@ export const getOutputAmount = async (
   Route,
   Trade,
   TradeType,
-  value
+  value,
+  dexName
 ) => {
-  if (pair.length > 0 && value && value > 0) {
-    if (pair.length === 1) {
+  console.log(pair);
+  if (pair && value && value > 0) {
+    if (pair) {
       try {
         console.log("trying");
 
-        const route = new Route(pair, tokenSdk);
-
+        const route = new Route([pair], tokenSdk);
+        console.log(route);
         const addressInput = route.path[0].address;
         const addressOutput = route.path[1].address;
         const path = [addressInput, addressOutput];
@@ -135,8 +136,8 @@ export const getOutputAmount = async (
         const trade = new Trade(route, tokenAmount, TradeType.EXACT_INPUT);
         const executionPrice = trade.executionPrice.toSignificant(6);
         let output = executionPrice * value;
-        console.log(output, path, trade);
-        return [output, path, trade];
+
+        return [output, path, trade, dexName];
 
         // const outputValue = new Fraction(
         //   outputAmount.numerator,
@@ -167,7 +168,8 @@ export const getOutputAmount2 = async (
   Route,
   Trade,
   TradeType,
-  value
+  value,
+  dexName
 ) => {
   if (value && value > 0 && pair.length > 1) {
     try {
@@ -193,7 +195,7 @@ export const getOutputAmount2 = async (
       );
       const executionPrice = trade.executionPrice.toSignificant(6);
       let output = executionPrice * value;
-      return [output, path, trade];
+      return [output, path, trade, dexName];
     } catch (error) {
       console.log(error, "alternate path");
     }

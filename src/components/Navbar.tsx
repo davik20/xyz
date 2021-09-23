@@ -48,7 +48,7 @@ const NavbarContainer = styled.div`
 const NavbarContent = styled.div`
   position: fixed;
   width: 100%;
-  padding: 0.7rem var(--container-padding);
+  padding: 0.6rem var(--container-padding);
   left: 0;
   top: 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
@@ -78,7 +78,7 @@ const NavLinks = styled.div`
 
   > ul > li > a {
     text-decoration: none;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-family: var(--font-header);
     text-transform: uppercase;
     color: white;
@@ -87,7 +87,7 @@ const NavLinks = styled.div`
 
 const Account = styled.div`
   background-color: var(--color-pink);
-  padding: 0.7rem 1.7rem;
+  /* padding: 0.7rem 1.7rem; */
   border-radius: 7px;
 `;
 export default Navbar;

@@ -16,17 +16,20 @@ function Swap() {
 
   const {
     pair,
+    pairs,
     token0Metadata,
     token1Metadata,
     tokens,
+    RouterSdks,
     SDK,
     token0Sdk,
     token1Sdk,
+    isMultiPair,
   }: any = useSwap();
   const [tokenInput0, setTokenInput0] = useState<any>("");
   const [tokenInput1, setTokenInput1] = useState<any>("");
   const [isRotated, setIsRotated] = useState(false);
-
+  const [tradeEntity, setTradeEntity] = useState<any>(null);
   const [swappable, setSwappable] = useState<any>(false);
   const [tokenBalance0, setTokenBalance0] = useState(0);
   const [insufficientLiquidityError, setInsufficientLiquidityError] = useState(
@@ -34,7 +37,7 @@ function Swap() {
   );
   const [swapLoading, setSwapLoading] = useState(false);
 
-  const handleInput = (
+  const handleInput = async (
     e: React.ChangeEvent<HTMLInputElement>,
     type: Number
   ) => {
@@ -44,48 +47,85 @@ function Swap() {
       if (value === "") {
         setTokenInput1("");
       }
+
       setTokenInput0(value);
       // getOutput amout and return
 
-      if (pair.length === 1 && SDK) {
-        getOutputAmount(
-          web3,
-          token0Sdk,
-          SDK.TokenAmount,
-          pair,
-          SDK.Fraction,
-          SDK.Rounding,
-          SDK.Route,
-          SDK.Trade,
-          SDK.TradeType,
-          value
-        ).then((result: any) => {
-          console.log("pair length is one");
-          if (result?.length > 1) {
-            const [output, path, trade]: any = result;
-            setTokenInput1(output);
-          }
+      if (!isMultiPair && RouterSdks && pairs) {
+        console.log("pari length");
+        try {
+          console.log(isMultiPair);
+          const functions: any = [];
+          console.log(pairs);
+          pairs.forEach((pair: any) => {
+            const SDK = RouterSdks[pair.dex];
+            console.log(SDK);
+            functions.push(
+              getOutputAmount(
+                web3,
+                token0Sdk,
+                SDK.TokenAmount,
+                pair.pair,
+                SDK.Fraction,
+                SDK.Rounding,
+                SDK.Route,
+                SDK.Trade,
+                SDK.TradeType,
+                value,
+                pair.dex
+              )
+            );
+          });
+
+          console.log(functions);
+          let result: any = await Promise.all(functions);
+          console.log("result ", result);
+          // sort result from highest to lowest
+          result = result.sort((a: any, b: any) => {
+            return b.output - a.output;
+          });
+
+          console.log(result);
+          setTokenInput1(result[0][0]);
+
+          setTradeEntity(result[0]);
+        } catch (error) {
+          console.log(error);
+        }
+      } else if (isMultiPair && pairs) {
+        const functions: any = [];
+        pairs.forEach((pair: any) => {
+          const SDK = RouterSdks[pair.dex];
+
+          functions.push(
+            getOutputAmount2(
+              web3,
+              token0Sdk,
+              SDK.TokenAmount,
+              pair.pair,
+              type,
+              SDK.Fraction,
+              SDK.Rounding,
+              SDK.Route,
+              SDK.Trade,
+              SDK.TradeType,
+              value,
+              pair.dex
+            )
+          );
         });
-      } else if (pair.length > 1) {
-        getOutputAmount2(
-          web3,
-          token0Sdk,
-          SDK.TokenAmount,
-          pair,
-          type,
-          SDK.Fraction,
-          SDK.Rounding,
-          SDK.Route,
-          SDK.Trade,
-          SDK.TradeType,
-          value
-        ).then((result: any) => {
-          console.log("pair length is one");
-          if (result?.length > 1) {
-            const [output, path, trade]: any = result;
-            setTokenInput1(output);
-          }
+
+        let result: any = await Promise.all(functions);
+        console.log(result);
+        // sort result from highest to lowest
+        result = result.sort((a: any, b: any) => {
+          return b.output - a.output;
         });
+
+        console.log(result);
+        setTokenInput1(result[0][0]);
+        console.log(result[0]);
+        setTradeEntity(result[0]);
       }
     } else if (type === 1) {
       if (value === "") {
@@ -94,45 +134,80 @@ function Swap() {
       setTokenInput1(value);
 
       // getOutput amout and return
-      if (pair.length === 1) {
-        getOutputAmount(
-          web3,
-          token1Sdk,
-          SDK.TokenAmount,
-          pair,
-          SDK.Fraction,
-          SDK.Rounding,
-          SDK.Route,
-          SDK.Trade,
-          SDK.TradeType,
-          value
-        ).then((result: any) => {
-          console.log("pair length is one");
-          if (result?.length > 1) {
-            const [output, path, trade]: any = result;
-            setTokenInput0(output);
-          }
+      if (!isMultiPair && RouterSdks && pairs) {
+        console.log("pari length");
+        try {
+          console.log(isMultiPair);
+          const functions: any = [];
+          console.log(pairs);
+          pairs.forEach((pair: any) => {
+            const SDK = RouterSdks[pair.dex];
+            console.log(SDK);
+            functions.push(
+              getOutputAmount(
+                web3,
+                token1Sdk,
+                SDK.TokenAmount,
+                pair.pair,
+                SDK.Fraction,
+                SDK.Rounding,
+                SDK.Route,
+                SDK.Trade,
+                SDK.TradeType,
+                value,
+                pair.dex
+              )
+            );
+          });
+
+          console.log(functions);
+          let result: any = await Promise.all(functions);
+          console.log("result ", result);
+          // sort result from highest to lowest
+          result = result.sort((a: any, b: any) => {
+            return b.output - a.output;
+          });
+
+          console.log(result);
+          setTokenInput0(result[0][0]);
+
+          setTradeEntity(result[0]);
+        } catch (error) {
+          console.log(error);
+        }
+      } else if (isMultiPair && pairs.length > 0) {
+        const functions: any = [];
+        pairs.forEach((pair: any) => {
+          const SDK = RouterSdks[pair.dex];
+
+          functions.push(
+            getOutputAmount2(
+              web3,
+              token1Sdk,
+              SDK.TokenAmount,
+              pair.pair,
+              type,
+              SDK.Fraction,
+              SDK.Rounding,
+              SDK.Route,
+              SDK.Trade,
+              SDK.TradeType,
+              value,
+              [pair.dex]
+            )
+          );
         });
-      } else if (pair.length > 1) {
-        getOutputAmount2(
-          web3,
-          token1Sdk,
-          SDK.TokenAmount,
-          pair,
-          type,
-          SDK.Fraction,
-          SDK.Rounding,
-          SDK.Route,
-          SDK.Trade,
-          SDK.TradeType,
-          value
-        ).then((result: any) => {
-          console.log("pair length is one");
-          if (result?.length > 1) {
-            const [output, path, trade]: any = result;
-            setTokenInput0(output);
-          }
+
+        let result: any = await Promise.all(functions);
+
+        // sort result from highest to lowest
+        result = result.sort((a: any, b: any) => {
+          return b.output - a.output;
         });
+
+        console.log(result);
+        setTokenInput0(result[0][0]);
+        setTradeEntity(result[0]);
       }
     }
   };

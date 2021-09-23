@@ -7,6 +7,7 @@
     "@material-ui/icons": "^4.11.2",
     "@metamask/detect-provider": "^1.2.0",
     "@pangolindex/sdk": "^1.1.0",
+    "@sushiswap/sdk": "^5.0.0-canary.87",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
