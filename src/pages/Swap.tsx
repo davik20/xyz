@@ -199,74 +199,76 @@ function Swap() {
     <SwapContainer>
       <SwapContent>
         <SwapBox>
-          <SwapHeader>
-            <h3>Swap</h3>
-            <div>
-              <Tool className="hover">
-                <AutorenewIcon />
-              </Tool>
-              <Tool className="hover">
-                <SettingsIcon />
-              </Tool>
-              <Connect>
-                <p>Connect</p>
-                <ArrowDropDownIcon className="connect" />
-              </Connect>
-            </div>
-          </SwapHeader>
-          <SwapBody>
-            <InputContainer0>
-              <TokenInput0
-                value={tokenInput0}
-                type="number"
-                onChange={(e) => handleInput(e, 0)}
-                placeholder="0.00"
-              />
-              <Max className="hover"> Max </Max>
-              <TokenSelect0>
-                <img
-                  src={token0Metadata && token0Metadata.img}
-                  alt="token logo"
+          <SwapBoxInner>
+            <SwapHeader>
+              <h3>Swap</h3>
+              <div>
+                <Tool className="hover">
+                  <AutorenewIcon />
+                </Tool>
+                <Tool className="hover">
+                  <SettingsIcon />
+                </Tool>
+                <Connect>
+                  <p>Connect</p>
+                  {/* <ArrowDropDownIcon className="connect" /> */}
+                </Connect>
+              </div>
+            </SwapHeader>
+            <SwapBody>
+              <InputContainer0>
+                <TokenInput0
+                  value={tokenInput0}
+                  type="number"
+                  onChange={(e) => handleInput(e, 0)}
+                  placeholder="0.00"
                 />
-                <p>{token0Metadata && token0Metadata.symbol}</p>
-                <ArrowDropDownIcon className="icon" />
-              </TokenSelect0>
-            </InputContainer0>
-            <SwapHorizontalCircleOutlinedIcon
-              className="swap-icon"
-              style={{ transition: " all .3s" }}
-              onClick={(
-                e: React.MouseEvent<SVGSVGElement, MouseEvent> | any
-              ) => {
-                if (!isRotated) {
-                  e.target.style.transform = "rotate(180deg)";
-                  setIsRotated(true);
-                }
-                if (isRotated) {
-                  e.target.style.transform = "rotate(-180deg)";
-                  setIsRotated(false);
-                }
-              }}
-            />
-            <InputContainer1>
-              <TokenInput1
-                value={tokenInput1}
-                type="number"
-                onChange={(e) => handleInput(e, 1)}
-                placeholder="0.00"
+                <Max className="hover"> Max </Max>
+                <TokenSelect0>
+                  <img
+                    src={token0Metadata && token0Metadata.img}
+                    alt="token logo"
+                  />
+                  <p>{token0Metadata && token0Metadata.symbol}</p>
+                  <ArrowDropDownIcon className="icon" />
+                </TokenSelect0>
+              </InputContainer0>
+              <SwapHorizontalCircleOutlinedIcon
+                className="swap-icon"
+                style={{ transition: " all .3s" }}
+                onClick={(
+                  e: React.MouseEvent<SVGSVGElement, MouseEvent> | any
+                ) => {
+                  if (!isRotated) {
+                    e.target.style.transform = "rotate(180deg)";
+                    setIsRotated(true);
+                  }
+                  if (isRotated) {
+                    e.target.style.transform = "rotate(-180deg)";
+                    setIsRotated(false);
+                  }
+                }}
               />
+              <InputContainer1>
+                <TokenInput1
+                  value={tokenInput1}
+                  type="number"
+                  onChange={(e) => handleInput(e, 1)}
+                  placeholder="0.00"
+                />
 
-              <TokenSelect1>
-                <img
-                  src={token1Metadata && token1Metadata.img}
-                  alt="token logo"
-                />
-                <p>{token1Metadata && token1Metadata.symbol}</p>
-                <ArrowDropDownIcon className="icon" />
-              </TokenSelect1>
-            </InputContainer1>
-            {renderSwapButton()}
-          </SwapBody>
+                <TokenSelect1>
+                  <img
+                    src={token1Metadata && token1Metadata.img}
+                    alt="token logo"
+                  />
+                  <p>{token1Metadata && token1Metadata.symbol}</p>
+                  <ArrowDropDownIcon className="icon" />
+                </TokenSelect1>
+              </InputContainer1>
+              {renderSwapButton()}
+            </SwapBody>
+          </SwapBoxInner>
         </SwapBox>
       </SwapContent>
     </SwapContainer>
@@ -276,6 +278,7 @@ function Swap() {
 const SwapContainer = styled.div`
   height: 100vh;
   width: 100%;
+  background-color: #000829;
 `;
 
 const SwapContent = styled.div`
@@ -284,19 +287,44 @@ const SwapContent = styled.div`
   width: 100%;
 `;
 const SwapBox = styled.div`
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.06));
   margin-top: 8rem;
   min-height: 20rem;
   width: 30rem;
-  padding: 1rem 2rem;
+  position: relative;
+
   border-radius: 1rem;
-  background-color: var(--color-brown-2);
-  box-shadow: 5px 5px 10px rgba(5, 1, 1, 0.1);
+  background: linear-gradient(
+    245.22deg,
+    #da2eef 7.97%,
+    #2b6aff 49.17%,
+    #39d0d8 92.1%
+  );
+  box-shadow: 2px 5px 20px #d82eef2b, 0px 10px 50px #d82eef3b,
+    0 -5px 20px #2b6bff2d, 0 -10px 50px #2b6bff6a, -5px 5px 20px #39d0d83b,
+    -10px 10px 50px #39d0d837;
+  padding: 1px;
+`;
+
+const SwapBoxInner = styled.div`
+  border-radius: 1rem;
+
+  padding: 1rem 2rem;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: rgba(19, 26, 53, 0.9);
+
+  backdrop-filter: opacity(0.3);
 `;
 const SwapHeader = styled.div`
   display: flex;
   align-items: center;
   & > h3 {
     color: rgba(255, 255, 255, 0.8);
+    font-family: var(--font-header);
   }
   & > div {
     margin-left: auto;
@@ -306,7 +334,6 @@ const SwapHeader = styled.div`
 `;
 
 const Tool = styled.div`
-  background-color: grey;
   margin-right: 1rem;
   padding: 0.1rem 0.2rem;
   border-radius: 2px;
@@ -314,14 +341,19 @@ const Tool = styled.div`
 `;
 
 const Connect = styled.div`
-  padding: 0.2rem 0.4rem;
-  background-color: var(--color-pink);
+  padding: 0.7rem 1.2rem;
+  padding-left: 1rem;
+  background-color: #2b6aff;
   cursor: pointer;
   display: flex;
-  border-radius: 2px;
+  border-radius: 5px;
   align-items: center;
+
   & > p {
-    font-size: 1rem;
+    font-size: 0.6rem;
+    letter-spacing: 3px;
+    font-weight: bold;
+    text-transform: uppercase;
   }
   & > .connect {
     color: var(--color-white);
@@ -331,6 +363,7 @@ const Connect = styled.div`
 
 const SwapBody = styled.div`
   margin-top: 3rem;
+  background: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
 
   display: flex;
   flex-direction: column;
@@ -348,9 +381,12 @@ const InputContainer0 = styled.div`
   width: 100%;
   padding: 1rem 1rem;
   display: flex;
+  z-index: 1;
+
   align-items: center;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 10px;
+  background-color: #000829;
   margin-bottom: 1rem;
 `;
 
@@ -361,18 +397,17 @@ const TokenInput0 = styled.input`
   border: none;
   color: white;
   background-color: transparent;
-  font-size: 1rem;
+  font-size: 1.2rem;
 `;
 
 const Max = styled.button`
   border: none;
   outline: none;
-  padding: 1.2px;
+  padding: 4px;
   border-radius: 2px;
   cursor: pointer;
 `;
 const TokenSelect0 = styled.div`
-  background-color: rgba(255, 255, 255, 0.2);
   margin-left: 20%;
   display: flex;
   align-items: center;
@@ -381,14 +416,14 @@ const TokenSelect0 = styled.div`
   cursor: pointer;
   width: 7rem;
   > img {
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
     object-fit: cover;
   }
 
   > p {
     margin-left: 0.5rem;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
   }
 
   > .icon {
@@ -409,7 +444,7 @@ const TokenSelect1 = styled(TokenSelect0)`
 const SwapButton = styled.div`
   margin-top: 1rem;
   margin-bottom: 0.5rem;
-  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid #da2eef;
   display: flex;
   padding: 1rem;
   font-size: 1.2rem;
@@ -417,7 +452,6 @@ const SwapButton = styled.div`
   border-radius: 10px;
   width: 100%;
   cursor: pointer;
-  border-top: 1px solid rgba(0, 0, 0, 0.01);
 `;
 
 export default Swap;

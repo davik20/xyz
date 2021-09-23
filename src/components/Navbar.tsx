@@ -42,6 +42,7 @@ const NavbarContainer = styled.div`
   width: 100%;
   position: relative;
   color: white;
+  z-index: 100;
 `;
 
 const NavbarContent = styled.div`
@@ -50,7 +51,7 @@ const NavbarContent = styled.div`
   padding: 0.7rem var(--container-padding);
   left: 0;
   top: 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -65,7 +66,7 @@ const Logo = styled.div`
 `;
 
 const NavLinks = styled.div`
-  margin-left: 15rem;
+  margin-left: auto;
   > ul {
     display: flex;
     list-style: none;
@@ -77,13 +78,14 @@ const NavLinks = styled.div`
 
   > ul > li > a {
     text-decoration: none;
-    font-size: 1.4rem;
+    font-size: 1.1rem;
+    font-family: var(--font-header);
+    text-transform: uppercase;
     color: white;
   }
 `;
 
 const Account = styled.div`
-  margin-left: auto;
   background-color: var(--color-pink);
   padding: 0.7rem 1.7rem;
   border-radius: 7px;

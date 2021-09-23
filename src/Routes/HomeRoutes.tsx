@@ -21,7 +21,7 @@ function HomeRoutes() {
 
 const Home = styled.div`
   height: 200rem;
-  background-color: var(--color-brown);
+  background-color: #000829;
   color: white;
   font-family: var(--font-default);
 `;

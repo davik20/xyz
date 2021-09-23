@@ -1,12 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Lato:wght@normal&display=swap");
 
+@import url("https://fonts.googleapis.com/css2?family=EB+Garamond&family=Playfair+Display&display=swap");
 :root {
   --color-brown: rgb(26, 26, 28);
   --color-brown-2: rgb(34, 34, 34);
   --color-pink: #e84142;
   --color-white: white;
   --container-padding: 13rem;
-  --font-default: "Lato", sans-serif;
+  --font-default: "Playfair Display" serif;
+  --font-header: "lato";
 }
 
 *,
