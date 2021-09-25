@@ -31,6 +31,7 @@ function Swap() {
   const [tokenInput1, setTokenInput1] = useState<any>("");
   const [isRotated, setIsRotated] = useState(false);
   const [tradeEntity, setTradeEntity] = useState<any>(null);
+  const [selectedTradeEntity, setSelectedTradeEntity] = useState<null>(null);
   const [swappable, setSwappable] = useState<any>(false);
   const [tokenBalance0, setTokenBalance0] = useState(0);
   const [insufficientLiquidityError, setInsufficientLiquidityError] = useState(
@@ -86,10 +87,11 @@ function Swap() {
             return b.output - a.output;
           });
 
-          console.log(result);
+          console.log(result[0]);
           setTokenInput1(result[0][0]);
 
-          setTradeEntity(result[0]);
+          setTradeEntity(result);
+          setSelectedTradeEntity(result[0]);
         } catch (error) {
           console.log(error);
         }
@@ -126,7 +128,8 @@ function Swap() {
         console.log(result);
         setTokenInput1(result[0][0]);
         console.log(result[0]);
-        setTradeEntity(result[0]);
+        setTradeEntity(result);
+        setSelectedTradeEntity(result[0]);
       }
     } else if (type === 1) {
       if (value === "") {
@@ -172,7 +175,8 @@ function Swap() {
           console.log(result);
           setTokenInput0(result[0][0]);
 
-          setTradeEntity(result[0]);
+          setTradeEntity(result);
+          setSelectedTradeEntity(result[0]);
         } catch (error) {
           console.log(error);
         }
@@ -208,7 +212,8 @@ function Swap() {
 
         console.log(result);
         setTokenInput0(result[0][0]);
-        setTradeEntity(result[0]);
+        setTradeEntity(result);
+        setSelectedTradeEntity(result[0]);
       }
     }
   };
@@ -352,6 +357,30 @@ function Swap() {
             </DexPanelHeader>
             <DexPanelBody>
               <DexList>
+                {tradeEntity &&
+                  tradeEntity.map((item: any, index: any, array: any) => {
+                    {
+                      console.log("item", item);
+                    }
+                    return (
+                      <DexListItem>
+                        <div>
+                          <span>
+                            <img
+                              src="https://ethereum-optimism.github.io/logos/UNI.png"
+                              alt="logo"
+                            />
+                          </span>{" "}
+                          <p>{item[3].toUpperCase()}</p>
+                        </div>
+                        <Price color="green">
+                          <p>{parseFloat(item[0]).toFixed(5)}</p>{" "}
+                          <span>Best</span>
+                        </Price>
+                      </DexListItem>
+                    );
+                  })}
+
                 <DexListItem>
                   <div>
                     <span>
@@ -360,20 +389,11 @@ function Swap() {
                         alt="logo"
                       />
                     </span>{" "}
-                    <p>Uniswap</p>
+                    Lydia
                   </div>
-                  <div>
-                    <p>8195.4</p> <span></span>
-                  </div>
-                </DexListItem>
-                <DexListItem>
-                  <p>
-                    <span></span> Lydia
-                  </p>
-                  <p>
-                    {" "}
-                    8195.4 <span></span>
-                  </p>
+                  <Price color="red">
+                    <p>8195.4</p> <span>-0.321</span>
+                  </Price>
                 </DexListItem>
               </DexList>
             </DexPanelBody>
@@ -554,7 +574,7 @@ const TokenSelect1 = styled(TokenSelect0)`
 const SwapButton = styled.div`
   margin-top: 1rem;
   margin-bottom: 0.5rem;
-  border: 1px solid var(--color-pink);
+  border: 1px solid var(--color-blue);
   display: flex;
   padding: 1rem;
   font-size: 1.2rem;
@@ -577,17 +597,18 @@ to {
 const DexPanel = styled.div`
   z-index: -1;
   background-color: #151533;
-  height: 10rem;
+
   width: 90%;
   left: 6%;
   display: block;
   position: absolute;
-  bottom: -10rem;
+
   border-radius: 10px;
   animation-name: ${slideDown};
   animation-duration: 0.2s;
   animation-fill-mode: forwards;
   padding: 2rem;
+
   /* border: 1px solid white; */
 `;
 
@@ -595,6 +616,10 @@ const DexPanelHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 1.5rem;
+  > h3 {
+    font-weight: 400;
+  }
 `;
 const DexPanelBody = styled.div``;
 const DexList = styled.div`
@@ -616,6 +641,19 @@ const DexListItem = styled.div`
 
   &:not(:last-child) {
     margin-bottom: 1rem;
+  }
+`;
+
+const Price = styled.div`
+  > p {
+    font-size: 0.9rem;
+    margin-right: 0.8rem;
+  }
+  > span {
+    font-size: 0.9rem;
+    background-color: ${(props) => props.color};
+    border-radius: 8px;
+    padding: 0.3rem 0.5rem;
   }
 `;
 
