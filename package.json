@@ -6,6 +6,7 @@
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
     "@metamask/detect-provider": "^1.2.0",
+    "@pancakeswap/sdk": "github:pancakeswap/pancake-swap-sdk",
     "@pangolindex/sdk": "^1.1.0",
     "@sushiswap/sdk": "^5.0.0-canary.87",
     "@testing-library/jest-dom": "^5.11.4",
@@ -18,6 +19,7 @@
     "@types/react-router-dom": "^5.1.9",
     "@uniswap/sdk": "^3.0.3",
     "ethers": "^5.4.7",
+    "quickswap/sdk": "^1.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router": "^5.2.1",
@@ -54,7 +56,10 @@
     ]
   },
   "devDependencies": {
+    "@types/big.js": "^6.1.2",
     "@types/styled-components": "^5.1.14",
-    "file-loader": "^6.2.0"
+    "big.js": "^6.1.1",
+    "file-loader": "^6.2.0",
+    "quickswap-sdk": "github:QuickSwap/QuickSwap-sdk"
   }
 }

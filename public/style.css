@@ -4,8 +4,11 @@
 :root {
   --color-brown: rgb(26, 26, 28);
   --color-brown-2: rgb(34, 34, 34);
-  --color-pink: #e84142;
+  --color-pink: #da2eef;
   --color-white: white;
+  --color-blue: #2b6aff;
+  --color-blue-dark: #000829;
+  --color-green: #39d0d8;
   --container-padding: 13rem;
   --font-default: "Playfair Display" serif;
   --font-header: "lato";

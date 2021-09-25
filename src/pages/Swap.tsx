@@ -10,6 +10,7 @@ import "../styles/swap.css";
 import { getOutputAmount, getOutputAmount2 } from "../utils/getOutputAmount";
 import { getSDK, UniswapSdkInterface } from "../utils/router";
 import { ClipLoader } from "react-spinners";
+import { Divider } from "@material-ui/core";
 
 function Swap() {
   const { web3, account, connectWallet }: any = useConnection();
@@ -344,6 +345,39 @@ function Swap() {
               {renderSwapButton()}
             </SwapBody>
           </SwapBoxInner>
+          <DexPanel>
+            <DexPanelHeader>
+              <h3>Price Impact</h3>
+              <p>0.34</p>
+            </DexPanelHeader>
+            <DexPanelBody>
+              <DexList>
+                <DexListItem>
+                  <div>
+                    <span>
+                      <img
+                        src="https://ethereum-optimism.github.io/logos/UNI.png"
+                        alt="logo"
+                      />
+                    </span>{" "}
+                    <p>Uniswap</p>
+                  </div>
+                  <div>
+                    <p>8195.4</p> <span></span>
+                  </div>
+                </DexListItem>
+                <DexListItem>
+                  <p>
+                    <span></span> Lydia
+                  </p>
+                  <p>
+                    {" "}
+                    8195.4 <span></span>
+                  </p>
+                </DexListItem>
+              </DexList>
+            </DexPanelBody>
+          </DexPanel>
         </SwapBox>
       </SwapContent>
     </SwapContainer>
@@ -353,13 +387,14 @@ function Swap() {
 const SwapContainer = styled.div`
   height: 100vh;
   width: 100%;
-  background-color: #000829;
+  background-color: var(--blue-dark);
 `;
 
 const SwapContent = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
+  position: relative;
 `;
 const SwapBox = styled.div`
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.06));
@@ -371,9 +406,9 @@ const SwapBox = styled.div`
   border-radius: 1rem;
   background: linear-gradient(
     245.22deg,
-    #da2eef 7.97%,
-    #2b6aff 49.17%,
-    #39d0d8 92.1%
+    var(--color-pink) 7.97%,
+    var(--color-blue) 49.17%,
+    var(--color-green) 92.1%
   );
   box-shadow: 2px 5px 20px #d82eef2b, 0px 10px 50px #d82eef3b,
     0 -5px 20px #2b6bff2d, 0 -10px 50px #2b6bff6a, -5px 5px 20px #39d0d83b,
@@ -418,7 +453,7 @@ const Tool = styled.div`
 const Connect = styled.div`
   padding: 0.7rem 1.2rem;
   padding-left: 1rem;
-  background-color: #2b6aff;
+  background-color: var(--color-blue);
   cursor: pointer;
   display: flex;
   border-radius: 5px;
@@ -519,7 +554,7 @@ const TokenSelect1 = styled(TokenSelect0)`
 const SwapButton = styled.div`
   margin-top: 1rem;
   margin-bottom: 0.5rem;
-  border: 1px solid #da2eef;
+  border: 1px solid var(--color-pink);
   display: flex;
   padding: 1rem;
   font-size: 1.2rem;
@@ -529,4 +564,61 @@ const SwapButton = styled.div`
   cursor: pointer;
 `;
 
+const slideDown = keyframes`
+from {
+  opacity: 0;
+  transform: translateY(-40px);
+}
+to {
+  opacity: 1
+  transform: translateY(0px)
+}
+`;
+const DexPanel = styled.div`
+  z-index: -1;
+  background-color: #151533;
+  height: 10rem;
+  width: 90%;
+  left: 6%;
+  display: block;
+  position: absolute;
+  bottom: -10rem;
+  border-radius: 10px;
+  animation-name: ${slideDown};
+  animation-duration: 0.2s;
+  animation-fill-mode: forwards;
+  padding: 2rem;
+  /* border: 1px solid white; */
+`;
+
+const DexPanelHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+const DexPanelBody = styled.div``;
+const DexList = styled.div`
+  margin-top: 1rem;
+`;
+const DexListItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  > div {
+    display: flex;
+    align-items: center;
+
+    > span > img {
+      width: 20px;
+      margin-right: 0.4rem;
+    }
+  }
+
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+`;
+
 export default Swap;
+
+/// #151533;

@@ -71,7 +71,8 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
           setToken0Sdk(result[0]);
           setToken1Sdk(result[1]);
 
-          console.log(result);
+          console.log("tokens ", result);
+          console.log(RouterSdks[Object.keys(RouterSdks)[1]]);
         });
       } catch (error) {
         console.log("Error at grabbing token sdk ", error);
@@ -152,11 +153,15 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
 
         let pairsReturned: any = await Promise.allSettled(functions);
         console.log(pairsReturned);
-        pairsReturned = pairsReturned.filter((item: any) => {
+        let filteredRouterNames: any = [];
+        pairsReturned = pairsReturned.filter((item: any, index: any) => {
           if (item.status === "fulfilled") {
+            filteredRouterNames.push(routerNames[index]);
             return item.value;
           }
         });
+
+        console.log("filtered", filteredRouterNames);
 
         if (pairsReturned.length === 0) {
           throw "No path found, taking alternate route";
@@ -164,14 +169,14 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
 
         const pairs = pairsReturned.map((pair: any, index: any) => {
           return {
-            dex: routerNames[index],
+            dex: filteredRouterNames[index],
             pair: pair.value,
           };
         });
 
         console.log(pairs);
         setIsMultiPair(false);
-
+        console.log(pairs);
         return pairs;
       } catch (error) {
         console.log(error);
@@ -203,8 +208,10 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
           }
           let pairsReturned: any = await Promise.allSettled(functions);
 
-          pairsReturned = pairsReturned.filter((item: any) => {
+          let filteredRouterNames: any = [];
+          pairsReturned = pairsReturned.filter((item: any, index: any) => {
             if (item.status === "fulfilled") {
+              filteredRouterNames.push(routerNames[index]);
               return item.value;
             }
           });
@@ -213,9 +220,10 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
             throw "Insufficient Liquidity error";
           }
           console.log("paris ", pairsReturned);
+          console.log(pairsReturned, routerNames);
           const pairs = pairsReturned.map((pair: any, index: any) => {
             return {
-              dex: routerNames[index],
+              dex: filteredRouterNames[index],
               pair: pair.value,
             };
           });

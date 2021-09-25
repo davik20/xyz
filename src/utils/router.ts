@@ -14,19 +14,19 @@ import {
 } from "@uniswap/sdk";
 
 import {
-  ChainId as ChainIdPancake,
-  WETH as BasePancake,
-  Fetcher as FetcherPancake,
-  Route as RoutePancake,
-  Trade as TradePancake,
-  TokenAmount as TokenAmountPancake,
-  TradeType as TradeTypePancake,
-  Currency as CurrencyPancake,
-  Token as TokenPancake,
-  Percent as PercentPancake,
-  Fraction as FractionPancake,
-  Rounding as RoundingPancake,
-} from "../dependencies/pancake-swap-sdk/src";
+  ChainId as ChainIdQuickSwap,
+  WAVAX as BaseQuickSwap,
+  Fetcher as FetcherQuickSwap,
+  Route as RouteQuickSwap,
+  Trade as TradeQuickSwap,
+  TokenAmount as TokenAmountQuickSwap,
+  TradeType as TradeTypeQuickSwap,
+  Currency as CurrencyQuickSwap,
+  Token as TokenQuickSwap,
+  Percent as PercentQuickSwap,
+  Fraction as FractionQuickSwap,
+  Rounding as RoundingQuickSwap,
+} from "quickswap/sdk";
 
 import {
   ChainId as ChainIdAvax,
@@ -120,25 +120,25 @@ const uniswapSdk = new RouterSdk(
   FractionEth,
   RoundingEth
 );
-const pancakeSdk = new RouterSdk(
-  ChainIdPancake,
-  BasePancake,
-  FetcherPancake,
-  RoutePancake,
-  TradePancake,
-  TokenAmountPancake,
-  TradeTypePancake,
-  CurrencyPancake,
-  TokenPancake,
-  PercentPancake,
-  FractionPancake,
-  RoundingPancake
+const quickSwapSdk = new RouterSdk(
+  ChainIdQuickSwap,
+  BaseQuickSwap,
+  FetcherQuickSwap,
+  RouteQuickSwap,
+  TradeQuickSwap,
+  TokenAmountQuickSwap,
+  TradeTypeQuickSwap,
+  CurrencyQuickSwap,
+  TokenQuickSwap,
+  PercentQuickSwap,
+  FractionQuickSwap,
+  RoundingQuickSwap
 );
 
 const sdks: any = {
   "0x1": {
+    quickSwap: uniswapSdk,
     uniswap: uniswapSdk,
-    // pangolin: pangolinSdk,
   },
   "0x3": {
     uniswap: uniswapSdk,
@@ -147,10 +147,11 @@ const sdks: any = {
     uniswap: uniswapSdk,
   },
   "0xa86a": {
-    pangolin: pangolinSdk,
+    // pangolin: pangolinSdk,
+    quickSwap: quickSwapSdk,
   },
   "0x38": {
-    pancake: pancakeSdk,
+    // pancake: pancakeSdk,
   },
 };
 

@@ -14,6 +14,7 @@ const addresses: any = {
     "0x3": "0x07865c6E87B9F70255377e024ace6630C1Eaa37F",
     "0x4": "0xeb8f08a975ab53e34d8a0330e0d34de942c95926",
     "0xa86a": "0xA7D7079b0FEaD91F3e65f86E8915Cb59c1a4C664",
+    "137": "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
   },
   dai: {
     "0x1": "0x6b175474e89094c44da98b954eedeac495271d0f",
@@ -25,10 +26,12 @@ const addresses: any = {
     "0x3": "0x516de3a7a567d81737e3a46ec4ff9cfd1fcb0136",
     "0x4": "0x3b00ef435fa4fcff5c209a37d1f3dcff37c705ad",
     "0xa86a": "0xc7198437980c041c805A1EDcbA50c1Ce5db95118",
+    "137": "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
   },
   avax: {
     "0xa86a": "0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7",
   },
+  matic: {},
 };
 
 const images: any = {
@@ -46,7 +49,25 @@ export const getRouter: any = (chainId: any, dex: any) => {};
 
 const Tokens: any = (chainId: any) => {
   const all: any = {
+    "137": [
+      // matic
+      {
+        name: "USD Coin",
+        symbol: "USDC.E",
+        decimals: "18",
+        img: images["usdc"],
+        address: addresses["usdc"][chainId],
+      },
+      {
+        name: "USD Tether",
+        symbol: "USDT",
+        decimals: "18",
+        img: images["usdt"],
+        address: addresses["usdt"][chainId],
+      },
+    ],
     "0xa86a": [
+      // avalanceh
       {
         name: "USD Coin",
         symbol: "USDC.E",
