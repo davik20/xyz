@@ -43,20 +43,20 @@ import {
   Rounding as RoundingTraderJoe,
 } from "@traderjoe-xyz/sdk";
 
-// import {
-//   ChainId as ChainIdQuickSwap,
-//   WAVAX as BaseQuickSwap,
-//   Fetcher as FetcherQuickSwap,
-//   Route as RouteQuickSwap,
-//   Trade as TradeQuickSwap,
-//   TokenAmount as TokenAmountQuickSwap,
-//   TradeType as TradeTypeQuickSwap,
-//   Currency as CurrencyQuickSwap,
-//   Token as TokenQuickSwap,
-//   Percent as PercentQuickSwap,
-//   Fraction as FractionQuickSwap,
-//   Rounding as RoundingQuickSwap,
-// } from "quickswap/sdk";
+import {
+  ChainId as ChainIdElk,
+  WAVAX as BaseElk,
+  Fetcher as FetcherElk,
+  Route as RouteElk,
+  Trade as TradeElk,
+  TokenAmount as TokenAmountElk,
+  TradeType as TradeTypeElk,
+  Currency as CurrencyElk,
+  Token as TokenElk,
+  Percent as PercentElk,
+  Fraction as FractionElk,
+  Rounding as RoundingElk,
+} from "@elkdex/avax-sdk";
 
 import {
   ChainId as ChainIdPangolin,
@@ -92,6 +92,8 @@ export interface UniswapSdkInterface {
   Rounding: typeof RoundingEth;
 }
 
+// Ethereum
+
 const uniswapSdk = new RouterSdk(
   ChainIdEth,
   BaseWETH,
@@ -106,6 +108,8 @@ const uniswapSdk = new RouterSdk(
   FractionEth,
   RoundingEth
 );
+
+// Avalanche
 const canarySdk = new RouterSdk(
   ChainIdCanary,
   BaseCanary,
@@ -135,6 +139,20 @@ const pangolinSdk = new RouterSdk(
   FractionPangolin,
   RoundingPangolin
 );
+const ElkSdk = new RouterSdk(
+  ChainIdElk,
+  BaseElk,
+  FetcherElk,
+  RouteElk,
+  TradeElk,
+  TokenAmountElk,
+  TradeTypeElk,
+  CurrencyElk,
+  TokenElk,
+  PercentElk,
+  FractionElk,
+  RoundingElk
+);
 const traderJoeSdk = new RouterSdk(
   ChainIdTraderJoe,
   BaseTraderJoe,
@@ -149,20 +167,6 @@ const traderJoeSdk = new RouterSdk(
   FractionTraderJoe,
   RoundingTraderJoe
 );
-// const quickSwapSdk = new RouterSdk(
-//   ChainIdQuickSwap,
-//   BaseQuickSwap,
-//   FetcherQuickSwap,
-//   RouteQuickSwap,
-//   TradeQuickSwap,
-//   TokenAmountQuickSwap,
-//   TradeTypeQuickSwap,
-//   CurrencyQuickSwap,
-//   TokenQuickSwap,
-//   PercentQuickSwap,
-//   FractionQuickSwap,
-//   RoundingQuickSwap
-// );
 
 const sdks: any = {
   "0x1": {
@@ -177,7 +181,10 @@ const sdks: any = {
   },
   "0xa86a": {
     pangolin: pangolinSdk,
-    traderJoe: traderJoeSdk,
+    "trader Joe": traderJoeSdk,
+    uniswap: uniswapSdk,
+    canary: canarySdk,
+    elk: ElkSdk,
   },
   "0x38": {
     // pancake: pancakeSdk,

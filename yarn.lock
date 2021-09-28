@@ -1459,6 +1459,25 @@
   "resolved" "https://registry.npmjs.org/@csstools/normalize.css/-/normalize.css-10.1.0.tgz"
   "version" "10.1.0"
 
+"@elkdex/avax-exchange-contracts@^1.0.0":
+  "integrity" "sha512-dy6qNeIuWTdkJHwPuwgT848sF5fSUYUIWsfvEbQNYq7gXAUi65T3yKrrp458M8cG9hx7S8mrO+AXjzA0Zpc1sQ=="
+  "resolved" "https://registry.npmjs.org/@elkdex/avax-exchange-contracts/-/avax-exchange-contracts-1.0.0.tgz"
+  "version" "1.0.0"
+
+"@elkdex/avax-sdk@^1.0.4":
+  "integrity" "sha512-SEkoxnNCvIJoFkJWrhIofFj2jlfXM9SyGG1wx+mC6tsOHEYh13xwWDj9dCr6PAw474whkj77ImJ6U7+ECyB05g=="
+  "resolved" "https://registry.npmjs.org/@elkdex/avax-sdk/-/avax-sdk-1.0.4.tgz"
+  "version" "1.0.4"
+  dependencies:
+    "@elkdex/avax-exchange-contracts" "^1.0.0"
+    "@openzeppelin/cli" "^2.8.2"
+    "big.js" "^5.2.2"
+    "decimal.js-light" "^2.5.0"
+    "jsbi" "^3.1.1"
+    "tiny-invariant" "^1.1.0"
+    "tiny-warning" "^1.0.3"
+    "toformat" "^2.0.0"
+
 "@emotion/cache@^11.4.0":
   "integrity" "sha512-Zx70bjE7LErRO9OaZrhf22Qye1y4F7iDl+ITjet0J+i+B88PrAOBkKvaAWhxsZf72tDLajwCgfCjJ2dvH77C3g=="
   "resolved" "https://registry.npmjs.org/@emotion/cache/-/cache-11.4.0.tgz"

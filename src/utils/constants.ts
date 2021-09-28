@@ -67,7 +67,14 @@ const Tokens: any = (chainId: any) => {
       },
     ],
     "0xa86a": [
-      // avalanceh
+      // avalanche
+      {
+        name: "AVAX",
+        symbol: "AVAX",
+        decimals: "18",
+        img: images["avax"],
+        address: addresses["avax"][chainId],
+      },
 
       {
         name: "USD Coin",
@@ -82,13 +89,6 @@ const Tokens: any = (chainId: any) => {
         decimals: "18",
         img: images["usdt"],
         address: addresses["usdt"][chainId],
-      },
-      {
-        name: "AVAX",
-        symbol: "AVAX",
-        decimals: "18",
-        img: images["avax"],
-        address: addresses["avax"][chainId],
       },
     ],
     "0x1": [

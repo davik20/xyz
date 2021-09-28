@@ -86,7 +86,8 @@ function Swap() {
           console.log("result ", result);
           // sort result from highest to lowest
           result = result.sort((a: any, b: any) => {
-            return b.output - a.output;
+            console.log("items ", a, b);
+            return b[0] - a[0];
           });
 
           console.log(result[0]);
@@ -124,7 +125,8 @@ function Swap() {
         console.log(result);
         // sort result from highest to lowest
         result = result.sort((a: any, b: any) => {
-          return b.output - a.output;
+          console.log("items ", a, b);
+          return b[0] - a[0];
         });
 
         console.log(result);
@@ -152,7 +154,7 @@ function Swap() {
             functions.push(
               getOutputAmount(
                 web3,
-                token1Sdk,
+                token1Sdks[pair.dex],
                 SDK.TokenAmount,
                 pair.pair,
                 SDK.Fraction,
@@ -166,12 +168,11 @@ function Swap() {
             );
           });
 
-          console.log(functions);
           let result: any = await Promise.all(functions);
           console.log("result ", result);
           // sort result from highest to lowest
           result = result.sort((a: any, b: any) => {
-            return b.output - a.output;
+            return b[0] - a[0];
           });
 
           console.log(result);
@@ -190,7 +191,7 @@ function Swap() {
           functions.push(
             getOutputAmount2(
               web3,
-              token1Sdk,
+              token1Sdks[pair.dex],
               SDK.TokenAmount,
               pair.pair,
               type,
@@ -209,7 +210,8 @@ function Swap() {
 
         // sort result from highest to lowest
         result = result.sort((a: any, b: any) => {
-          return b.output - a.output;
+          console.log("items ", a, b);
+          return b[0] - a[0];
         });
 
         console.log(result);
@@ -362,7 +364,6 @@ function Swap() {
                 {tradeEntity &&
                   tradeEntity.map((item: any, index: any, array: any) => {
                     {
-                      console.log("item", item);
                     }
                     return (
                       <DexListItem>
