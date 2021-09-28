@@ -24,6 +24,8 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
   const [token1Metadata, setToken1Metadata] = useState<any>(null);
   const [token0Sdk, setToken0Sdk] = useState<any>(null);
   const [token1Sdk, setToken1Sdk] = useState<any>(null);
+  const [token0Sdks, setToken0Sdks] = useState<any>(null);
+  const [token1Sdks, setToken1Sdks] = useState<any>(null);
   const [pairs, setPairs] = useState<any>(null);
   const [isMultiPair, setIsMultiPair] = useState<any>(false);
   const [pair, setPair] = useState<any>([]);
@@ -35,7 +37,7 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
   const sdkProvider = useMemo(() => SDKPROVIDER(chainId), [chainId]);
 
   const RouterSdks: any = useMemo(() => getSDK(chainId, "uniswap"), [chainId]);
-
+  console.log(RouterSdks);
   let provider = new ethers.providers.Web3Provider(web3.currentProvider);
   useEffect(() => {
     if (tokens.length > 0) {
@@ -48,31 +50,72 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
   useEffect(() => {
     // Grab Tokens from the sdk
     // console.log(Object.keys(RouterSdks));
+
     if (tokens.length > 0 && chainId && RouterSdks) {
       try {
-        Promise.all([
-          fetchTokenData(
-            RouterSdks[Object.keys(RouterSdks)[0]].Fetcher,
-            chainId,
-            tokens[0].address,
-            provider,
-            tokens[0].symbol,
-            tokens[0].name
-          ),
-          fetchTokenData(
-            RouterSdks[Object.keys(RouterSdks)[0]].Fetcher,
-            chainId,
-            tokens[1].address,
-            provider,
-            tokens[1].symbol,
-            tokens[1].name
-          ),
-        ]).then((result) => {
-          setToken0Sdk(result[0]);
-          setToken1Sdk(result[1]);
+        const functions = [];
+        let i: any;
+        for (i of Object.keys(RouterSdks)) {
+          console.log(RouterSdks[i]);
 
-          console.log("tokens ", result);
-          console.log(RouterSdks[Object.keys(RouterSdks)[1]]);
+          functions.push([
+            fetchTokenData(
+              RouterSdks[i].Fetcher,
+              chainId,
+              tokens[0].address,
+              provider,
+              tokens[0].symbol,
+              tokens[0].name
+            ),
+
+            fetchTokenData(
+              RouterSdks[i].Fetcher,
+              chainId,
+              tokens[1].address,
+              provider,
+              tokens[1].symbol,
+              tokens[1].name
+            ),
+          ]);
+        }
+
+        console.log(functions);
+        let index = 0;
+
+        // RouterSdks[Object.keys(RouterSdks[counter])]
+        functions.forEach((items: any) => {
+          Promise.allSettled(items)
+
+            .then((result: any) => {
+              console.log(index, Object.keys(RouterSdks)[index]);
+
+              console.log("Inseid promise ", index);
+              const [token0, token1] = result;
+              if (token0.status === "fulfilled") {
+                setToken0Sdks((prev: any) => {
+                  return {
+                    ...prev,
+                    [Object.keys(RouterSdks)[index]]: token0.value,
+                  };
+                });
+              }
+
+              if (token1.status === "fulfilled") {
+                setToken1Sdks((prev: any) => {
+                  return {
+                    ...prev,
+                    [Object.keys(RouterSdks)[index]]: token1.value,
+                  };
+                });
+              }
+
+              index += 1;
+            })
+
+            .catch((err) => {
+              console.log(err);
+              index += 1;
+            });
         });
       } catch (error) {
         console.log("Error at grabbing token sdk ", error);
@@ -83,8 +126,8 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
   useEffect(() => {
     // get pair
 
-    if (token0Sdk && token1Sdk) {
-      getPairs(token0Sdk, token1Sdk)
+    if (token0Sdks && token1Sdks) {
+      getPairs(token0Sdks, token1Sdks)
         .then((pairs: any) => {
           console.log("a pair ", pairs);
           setPairs(pairs);
@@ -99,7 +142,7 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
     }
 
     return () => {};
-  }, [token0Sdk, token1Sdk]);
+  }, [token0Sdks, token1Sdks]);
 
   useEffect(() => {
     if (token0Metadata) {
@@ -137,18 +180,24 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
   }, [token1Metadata]);
 
   // for getting pair
-  const getPairs: any = async (token0Sdk: any, tokenSdk: any) => {
+  const getPairs: any = async (token0Sdks: any, token1Sdks: any) => {
     console.log("chain id", chainId);
-    if (token0Sdk && token1Sdk && RouterSdks) {
+    if (token0Sdks && token1Sdks && RouterSdks) {
       console.log("going in");
       try {
         const functions = [];
         const routerNames: any = [];
         for (let i in RouterSdks) {
-          functions.push(
-            RouterSdks[i].Fetcher.fetchPairData(token0Sdk, token1Sdk, provider)
-          );
-          routerNames.push(i);
+          if (token0Sdks[i] && token1Sdks[i]) {
+            functions.push(
+              RouterSdks[i].Fetcher.fetchPairData(
+                token0Sdks[i],
+                token1Sdks[i],
+                provider
+              )
+            );
+            routerNames.push(i);
+          }
         }
 
         let pairsReturned: any = await Promise.allSettled(functions);
@@ -160,6 +209,8 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
             return item.value;
           }
         });
+
+        console.log("pairs", pairsReturned);
 
         console.log("filtered", filteredRouterNames);
 
@@ -185,18 +236,18 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
 
           const functions = [];
           const routerNames: any = [];
-
-          for (let i in RouterSdks) {
+          let i: any;
+          for (i in RouterSdks) {
             functions.push(
               Promise.all([
                 RouterSdks[i].Fetcher.fetchPairData(
-                  token0Sdk,
+                  token0Sdks[Object.keys(RouterSdks)[i]],
 
                   getWETH(RouterSdks[i].WETH, chainId),
                   provider
                 ),
                 RouterSdks[i].Fetcher.fetchPairData(
-                  token1Sdk,
+                  token1Sdks[Object.keys(RouterSdks)[i]],
                   getWETH(RouterSdks[i].WETH, chainId),
                   provider
                 ),
@@ -219,7 +270,7 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
           if (pairsReturned.length === 0) {
             throw "Insufficient Liquidity error";
           }
-          console.log("paris ", pairsReturned);
+          console.log("pairs ", pairsReturned);
           console.log(pairsReturned, routerNames);
           const pairs = pairsReturned.map((pair: any, index: any) => {
             return {
@@ -283,6 +334,8 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
           token1Contract,
           isMultiPair,
           pairs,
+          token0Sdks,
+          token1Sdks,
         }}
       >
         {children}
@@ -301,6 +354,8 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
     token1Contract,
     isMultiPair,
     pairs,
+    token0Sdks,
+    token1Sdks,
   ]);
 };
 

@@ -23,6 +23,8 @@ function Swap() {
     tokens,
     RouterSdks,
     SDK,
+    token0Sdks,
+    token1Sdks,
     token0Sdk,
     token1Sdk,
     isMultiPair,
@@ -65,7 +67,7 @@ function Swap() {
             functions.push(
               getOutputAmount(
                 web3,
-                token0Sdk,
+                token0Sdks[pair.dex],
                 SDK.TokenAmount,
                 pair.pair,
                 SDK.Fraction,
@@ -103,7 +105,7 @@ function Swap() {
           functions.push(
             getOutputAmount2(
               web3,
-              token0Sdk,
+              token0Sdks[pair.dex],
               SDK.TokenAmount,
               pair.pair,
               type,

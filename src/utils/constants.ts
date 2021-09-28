@@ -68,6 +68,7 @@ const Tokens: any = (chainId: any) => {
     ],
     "0xa86a": [
       // avalanceh
+
       {
         name: "USD Coin",
         symbol: "USDC.E",

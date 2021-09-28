@@ -1414,6 +1414,25 @@
   "resolved" "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   "version" "0.2.3"
 
+"@canarydex/exchange-contracts@^1.0.2":
+  "integrity" "sha512-BBKpBhV4Yy6SoYoRO7p/9KWWSWeAmJHPzZA/kjjFcEPmKHe7B8oe5E9S5RIjRoDxDod41rHLcrXDYMqoUjgwzg=="
+  "resolved" "https://registry.npmjs.org/@canarydex/exchange-contracts/-/exchange-contracts-1.0.2.tgz"
+  "version" "1.0.2"
+
+"@canarydex/sdk@^1.0.1":
+  "integrity" "sha512-PAth0fdlNp7VIrnMuLVSiBGEe8HBwe7czNqPPwFWHTsMFJ4it7NUDLThuHe8RgZJMJIDpSg6MyQ+CDx5xSXPsw=="
+  "resolved" "https://registry.npmjs.org/@canarydex/sdk/-/sdk-1.0.1.tgz"
+  "version" "1.0.1"
+  dependencies:
+    "@canarydex/exchange-contracts" "^1.0.2"
+    "@openzeppelin/cli" "^2.8.2"
+    "big.js" "^5.2.2"
+    "decimal.js-light" "^2.5.0"
+    "jsbi" "^3.1.1"
+    "tiny-invariant" "^1.1.0"
+    "tiny-warning" "^1.0.3"
+    "toformat" "^2.0.0"
+
 "@cnakazawa/watch@^1.0.3":
   "integrity" "sha512-v9kIhKwjeZThiWrLmj0y17CWoyddASLj9O2yvbZkbvw/N3rWOYy9zkV66ursAoVr0mV15bL8g0c4QZUE6cdDoQ=="
   "resolved" "https://registry.npmjs.org/@cnakazawa/watch/-/watch-1.0.4.tgz"
@@ -3839,6 +3858,20 @@
     "event-iterator" "^2.0.0"
     "loglevel" "^1.7.0"
 
+"@traderjoe-xyz/sdk@^0.4.8":
+  "integrity" "sha512-bOj8DFG9U0kaY1HK8Xh4lqe7FvfSxjvGVoGo6Xc3evDgCR+li+AVPtSGun47G3BIYN0tvRZPa6JnCqizl7vejw=="
+  "resolved" "https://registry.npmjs.org/@traderjoe-xyz/sdk/-/sdk-0.4.8.tgz"
+  "version" "0.4.8"
+  dependencies:
+    "@openzeppelin/cli" "^2.8.2"
+    "@uniswap/v2-core" "^1.0.1"
+    "big.js" "^5.2.2"
+    "decimal.js-light" "^2.5.0"
+    "jsbi" "^3.1.1"
+    "tiny-invariant" "^1.1.0"
+    "tiny-warning" "^1.0.3"
+    "toformat" "^2.0.0"
+
 "@truffle/abi-utils@^0.1.0":
   "integrity" "sha512-A9bW5XHywPNHod8rsu4x4eyM4C6k3eMeyOCd47edhiA/e9kgAVp6J3QDzKoHS8nuJ2qiaq+jk5bLnAgNWAHYyQ=="
   "resolved" "https://registry.npmjs.org/@truffle/abi-utils/-/abi-utils-0.1.6.tgz"
@@ -4905,7 +4938,7 @@
     "tiny-warning" "^1.0.3"
     "toformat" "^2.0.0"
 
-"@uniswap/v2-core@^1.0.0":
+"@uniswap/v2-core@^1.0.0", "@uniswap/v2-core@^1.0.1":
   "integrity" "sha512-MtybtkUPSyysqLY2U210NBDeCHX+ltHt3oADGdjqoThZaFRDKwM6k1Nb3F0A3hk5hwuQvytFWhrWHOEq6nVJ8Q=="
   "resolved" "https://registry.npmjs.org/@uniswap/v2-core/-/v2-core-1.0.1.tgz"
   "version" "1.0.1"

@@ -14,33 +14,63 @@ import {
 } from "@uniswap/sdk";
 
 import {
-  ChainId as ChainIdQuickSwap,
-  WAVAX as BaseQuickSwap,
-  Fetcher as FetcherQuickSwap,
-  Route as RouteQuickSwap,
-  Trade as TradeQuickSwap,
-  TokenAmount as TokenAmountQuickSwap,
-  TradeType as TradeTypeQuickSwap,
-  Currency as CurrencyQuickSwap,
-  Token as TokenQuickSwap,
-  Percent as PercentQuickSwap,
-  Fraction as FractionQuickSwap,
-  Rounding as RoundingQuickSwap,
-} from "quickswap/sdk";
+  ChainId as ChainIdCanary,
+  WAVAX as BaseCanary,
+  Fetcher as FetcherCanary,
+  Route as RouteCanary,
+  Trade as TradeCanary,
+  TokenAmount as TokenAmountCanary,
+  TradeType as TradeTypeCanary,
+  Currency as CurrencyCanary,
+  Token as TokenCanary,
+  Percent as PercentCanary,
+  Fraction as FractionCanary,
+  Rounding as RoundingCanary,
+} from "@canarydex/sdk";
 
 import {
-  ChainId as ChainIdAvax,
-  WAVAX as BaseWavax,
-  Fetcher as FetcherAvax,
-  Route as RouteAvax,
-  Trade as TradeAvax,
-  TokenAmount as TokenAmountAvax,
-  TradeType as TradeTypeAvax,
-  Currency as CurrencyAvax,
-  Token as TokenAvax,
-  Percent as PercentAvax,
-  Fraction as FractionAvax,
-  Rounding as RoundingAvax,
+  ChainId as ChainIdTraderJoe,
+  WAVAX as BaseTraderJoe,
+  Fetcher as FetcherTraderJoe,
+  Route as RouteTraderJoe,
+  Trade as TradeTraderJoe,
+  TokenAmount as TokenAmountTraderJoe,
+  TradeType as TradeTypeTraderJoe,
+  Currency as CurrencyTraderJoe,
+  Token as TokenTraderJoe,
+  Percent as PercentTraderJoe,
+  Fraction as FractionTraderJoe,
+  Rounding as RoundingTraderJoe,
+} from "@traderjoe-xyz/sdk";
+
+// import {
+//   ChainId as ChainIdQuickSwap,
+//   WAVAX as BaseQuickSwap,
+//   Fetcher as FetcherQuickSwap,
+//   Route as RouteQuickSwap,
+//   Trade as TradeQuickSwap,
+//   TokenAmount as TokenAmountQuickSwap,
+//   TradeType as TradeTypeQuickSwap,
+//   Currency as CurrencyQuickSwap,
+//   Token as TokenQuickSwap,
+//   Percent as PercentQuickSwap,
+//   Fraction as FractionQuickSwap,
+//   Rounding as RoundingQuickSwap,
+// } from "quickswap/sdk";
+
+import {
+  ChainId as ChainIdPangolin,
+  WAVAX as BasePangolin,
+  Fetcher as FetcherPangolin,
+  Route as RoutePangolin,
+  Trade as TradePangolin,
+  TokenAmount as TokenAmountPangolin,
+  TradeType as TradeTypePangolin,
+  Currency as CurrencyPangolin,
+  Token as TokenPangolin,
+  Percent as PercentPangolin,
+  Fraction as FractionPangolin,
+  Rounding as RoundingPangolin,
 } from "@pangolindex/sdk";
 
 import { ethers } from "ethers";
@@ -61,50 +91,6 @@ export interface UniswapSdkInterface {
   Fraction: typeof FractionEth;
   Rounding: typeof RoundingEth;
 }
-export interface PangolinSdkInterface {
-  ChainId: typeof ChainIdAvax;
-  WETH: any;
-  Fetcher: typeof FetcherAvax;
-  Route: typeof RouteAvax;
-  Trade: typeof TradeAvax;
-  TokenAmount: typeof TokenAmountAvax;
-  TradeType: typeof TradeTypeAvax;
-  Currency: typeof CurrencyAvax;
-  Token: typeof TokenAvax;
-  Percent: typeof PercentAvax;
-  Fraction: typeof FractionAvax;
-  Rounding: typeof RoundingAvax;
-}
-
-// const uniswapSdk: UniswapSdkInterface = {
-//   ChainId: ChainIdEth,
-//   WETH: BaseWETH,
-//   Fetcher: FetcherEth,
-//   Route: RouteEth,
-//   Trade: TradeEth,
-//   TokenAmount: TokenAmountEth,
-//   TradeType: TradeTypeEth,
-//   Currency: CurrencyEth,
-//   Token: TokenEth,
-//   Percent: PercentEth,
-//   Fraction: FractionEth,
-//   Rounding: RoundingEth,
-// };
-
-const pangolinSdk: PangolinSdkInterface = {
-  ChainId: ChainIdAvax,
-  WETH: BaseWETH,
-  Fetcher: FetcherAvax,
-  Route: RouteAvax,
-  Trade: TradeAvax,
-  TokenAmount: TokenAmountAvax,
-  TradeType: TradeTypeAvax,
-  Currency: CurrencyAvax,
-  Token: TokenAvax,
-  Percent: PercentAvax,
-  Fraction: FractionAvax,
-  Rounding: RoundingAvax,
-};
 
 const uniswapSdk = new RouterSdk(
   ChainIdEth,
@@ -120,20 +106,63 @@ const uniswapSdk = new RouterSdk(
   FractionEth,
   RoundingEth
 );
-const quickSwapSdk = new RouterSdk(
-  ChainIdQuickSwap,
-  BaseQuickSwap,
-  FetcherQuickSwap,
-  RouteQuickSwap,
-  TradeQuickSwap,
-  TokenAmountQuickSwap,
-  TradeTypeQuickSwap,
-  CurrencyQuickSwap,
-  TokenQuickSwap,
-  PercentQuickSwap,
-  FractionQuickSwap,
-  RoundingQuickSwap
+const canarySdk = new RouterSdk(
+  ChainIdCanary,
+  BaseCanary,
+  FetcherCanary,
+  RouteCanary,
+  TradeCanary,
+  TokenAmountCanary,
+  TradeTypeCanary,
+  CurrencyCanary,
+  TokenCanary,
+  PercentCanary,
+  FractionCanary,
+  RoundingCanary
 );
+
+const pangolinSdk = new RouterSdk(
+  ChainIdPangolin,
+  BasePangolin,
+  FetcherPangolin,
+  RoutePangolin,
+  TradePangolin,
+  TokenAmountPangolin,
+  TradeTypePangolin,
+  CurrencyPangolin,
+  TokenPangolin,
+  PercentPangolin,
+  FractionPangolin,
+  RoundingPangolin
+);
+const traderJoeSdk = new RouterSdk(
+  ChainIdTraderJoe,
+  BaseTraderJoe,
+  FetcherTraderJoe,
+  RouteTraderJoe,
+  TradeTraderJoe,
+  TokenAmountTraderJoe,
+  TradeTypeTraderJoe,
+  CurrencyTraderJoe,
+  TokenTraderJoe,
+  PercentTraderJoe,
+  FractionTraderJoe,
+  RoundingTraderJoe
+);
+// const quickSwapSdk = new RouterSdk(
+//   ChainIdQuickSwap,
+//   BaseQuickSwap,
+//   FetcherQuickSwap,
+//   RouteQuickSwap,
+//   TradeQuickSwap,
+//   TokenAmountQuickSwap,
+//   TradeTypeQuickSwap,
+//   CurrencyQuickSwap,
+//   TokenQuickSwap,
+//   PercentQuickSwap,
+//   FractionQuickSwap,
+//   RoundingQuickSwap
+// );
 
 const sdks: any = {
   "0x1": {
@@ -147,8 +176,8 @@ const sdks: any = {
     uniswap: uniswapSdk,
   },
   "0xa86a": {
-    // pangolin: pangolinSdk,
-    quickSwap: quickSwapSdk,
+    pangolin: pangolinSdk,
+    traderJoe: traderJoeSdk,
   },
   "0x38": {
     // pancake: pancakeSdk,

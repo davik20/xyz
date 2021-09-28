@@ -119,10 +119,11 @@ export const getOutputAmount = async (
 ) => {
   console.log(pair);
   if (pair && value && value > 0) {
+    console.log("trying 1");
     if (pair) {
       try {
-        console.log("trying");
-
+        console.log("trying 2");
+        console.log(Route, dexName);
         const route = new Route([pair], tokenSdk);
         console.log(route);
         const addressInput = route.path[0].address;
