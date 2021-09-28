@@ -76,6 +76,7 @@ import {
 import { ethers } from "ethers";
 import { mapHexToNumber } from "./swap";
 import { RouterSdk } from "../classes/RouterSdkClass";
+import { dexLogos } from "./constants";
 
 export interface UniswapSdkInterface {
   ChainId: typeof ChainIdEth;
@@ -189,6 +190,10 @@ const sdks: any = {
   "0x38": {
     // pancake: pancakeSdk,
   },
+};
+
+export const getDexLogo = (dexName: any) => {
+  return dexLogos[dexName];
 };
 
 export const getSDK = (chainId: any, dex: any) => {

@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import useConnection from "../context/UseConnection";
+import { shortenAddress } from "../utils/swap";
 
 function Navbar() {
-  const { provider, updateProvider }: any = useConnection();
+  const { provider, updateProvider, account }: any = useConnection();
 
   console.log(provider);
 
@@ -30,7 +31,9 @@ function Navbar() {
             </li>
           </ul>
         </NavLinks>
-        <Account>0x2838488</Account>
+        <Account>
+          {account ? shortenAddress(account) : "Connect a wallet"}
+        </Account>
       </NavbarContent>
     </NavbarContainer>
   );
@@ -87,7 +90,8 @@ const NavLinks = styled.div`
 
 const Account = styled.div`
   background-color: var(--color-pink);
-  /* padding: 0.7rem 1.7rem; */
+  padding: 0.7rem 1.7rem;
   border-radius: 7px;
+  cursor: pointer;
 `;
 export default Navbar;

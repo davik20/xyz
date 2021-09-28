@@ -6,10 +6,10 @@ import {
   UniswapSdkInterface,
   sdkProvider as SDKPROVIDER,
 } from "../utils/router";
-import { fetchTokenData } from "../utils/swap";
+import { fetchTokenData, getTokenContract, getBalance } from "../utils/swap";
 import useConnection from "./UseConnection";
 import { SwapContext } from "./UseSwap";
-import Erc20Abi from "../contracts/Erc20Abi.json";
+
 import RouterAbi from "../contracts/RouterAbi.json";
 import { ethers } from "ethers";
 
@@ -146,7 +146,7 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
 
   useEffect(() => {
     if (token0Metadata) {
-      const contract = getTokenContract(token0Metadata);
+      const contract = getTokenContract(token0Metadata, web3);
       if (contract && account) {
         const balance = getBalance(contract, account)
           .then((balance: any) => {
@@ -293,31 +293,8 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
   };
 
   // for getting tokenContract
-  const getTokenContract: any = (tokenMetaData: any) => {
-    if (tokenMetaData) {
-      try {
-        const contract = new web3.eth.Contract(Erc20Abi, tokenMetaData.address);
-        return contract;
-      } catch (error) {
-        console.log("contract creation error ", error);
-      }
-    } else {
-      return "nothing found";
-    }
-  };
 
   // for getting use balance
-  const getBalance: any = async (contract: any, account: any) => {
-    if (contract && account) {
-      return contract.methods
-        .balanceOf(account)
-        .call({ from: account })
-        .then((balance: any) => {
-          console.log(balance);
-          return balance;
-        });
-    }
-  };
 
   return useMemo(() => {
     return (

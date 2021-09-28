@@ -20,6 +20,7 @@ const ConnectionProvider: React.FC<Props> = ({ children }) => {
   const connectWallet = useMemo(() => {
     return () => {
       const window2: any = { ...window };
+      console.log("connectinv ");
       if (window2.ethereum) {
         window2.ethereum
           .request({ method: "eth_requestAccounts" })

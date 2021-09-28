@@ -1,3 +1,5 @@
+import Erc20Abi from "../contracts/Erc20Abi.json";
+
 export const mapHexToNumber: any = {
   "0x1": 1, // ethereum mainnet
   "0x3": 3,
@@ -42,4 +44,39 @@ const etherMap: any = {
 
 export const amountToWei = (web3: any, amount: String, decimals: String) => {
   return web3.utils.toWei(String(amount), etherMap[String(decimals)]);
+};
+export const amountToEther = (web3: any, amount: String, decimals: String) => {
+  return web3.utils.fromWei(String(amount), etherMap[String(decimals)]);
+};
+
+export const shortenAddress = (address: string) => {
+  return `${address.slice(0, 5)}....${address.slice(
+    address.length - 4,
+    address.length - 1
+  )}`;
+};
+
+export const getTokenContract: any = (tokenMetaData: any, web3: any) => {
+  if (tokenMetaData) {
+    try {
+      const contract = new web3.eth.Contract(Erc20Abi, tokenMetaData.address);
+      return contract;
+    } catch (error) {
+      console.log("contract creation error ", error);
+    }
+  } else {
+    return "nothing found";
+  }
+};
+
+export const getBalance: any = async (contract: any, account: any) => {
+  if (contract && account) {
+    return contract.methods
+      .balanceOf(account)
+      .call({ from: account })
+      .then((balance: any) => {
+        console.log(balance);
+        return balance;
+      });
+  }
 };

@@ -8,9 +8,12 @@ import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import SwapHorizontalCircleOutlinedIcon from "@material-ui/icons/SwapHorizontalCircleOutlined";
 import "../styles/swap.css";
 import { getOutputAmount, getOutputAmount2 } from "../utils/getOutputAmount";
-import { getSDK, UniswapSdkInterface } from "../utils/router";
+import { getDexLogo, getSDK, UniswapSdkInterface } from "../utils/router";
 import { ClipLoader } from "react-spinners";
 import { Divider } from "@material-ui/core";
+import { shortenAddress } from "../utils/swap";
+import ModalContainer from "../components/ModalContainer";
+import TokenModal from "../components/TokenModal";
 
 function Swap() {
   const { web3, account, connectWallet }: any = useConnection();
@@ -23,12 +26,15 @@ function Swap() {
     tokens,
     RouterSdks,
     SDK,
+
     token0Sdks,
     token1Sdks,
     token0Sdk,
     token1Sdk,
     isMultiPair,
   }: any = useSwap();
+  const [showDexList, setShowDexList] = useState<any>(false);
+  const [showTokenList, setShowTokenList] = useState<any>(false);
   const [tokenInput0, setTokenInput0] = useState<any>("");
   const [tokenInput1, setTokenInput1] = useState<any>("");
   const [isRotated, setIsRotated] = useState(false);
@@ -50,6 +56,7 @@ function Swap() {
     if (type === 0) {
       if (value === "") {
         setTokenInput1("");
+        setShowDexList(false);
       }
 
       setTokenInput0(value);
@@ -95,6 +102,7 @@ function Swap() {
 
           setTradeEntity(result);
           setSelectedTradeEntity(result[0]);
+          setShowDexList(true);
         } catch (error) {
           console.log(error);
         }
@@ -134,10 +142,12 @@ function Swap() {
         console.log(result[0]);
         setTradeEntity(result);
         setSelectedTradeEntity(result[0]);
+        setShowDexList(true);
       }
     } else if (type === 1) {
       if (value === "") {
         setTokenInput0("");
+        setShowDexList(false);
       }
       setTokenInput1(value);
 
@@ -180,6 +190,7 @@ function Swap() {
 
           setTradeEntity(result);
           setSelectedTradeEntity(result[0]);
+          setShowDexList(true);
         } catch (error) {
           console.log(error);
         }
@@ -218,6 +229,7 @@ function Swap() {
         setTokenInput0(result[0][0]);
         setTradeEntity(result);
         setSelectedTradeEntity(result[0]);
+        setShowDexList(true);
       }
     }
   };
@@ -281,129 +293,134 @@ function Swap() {
   };
 
   return (
-    <SwapContainer>
-      <SwapContent>
-        <SwapBox>
-          <SwapBoxInner>
-            <SwapHeader>
-              <h3>Swap</h3>
-              <div>
-                <Tool className="hover">
-                  <AutorenewIcon />
-                </Tool>
-                <Tool className="hover">
-                  <SettingsIcon />
-                </Tool>
-                <Connect>
-                  <p>Connect</p>
-                  {/* <ArrowDropDownIcon className="connect" /> */}
-                </Connect>
-              </div>
-            </SwapHeader>
-            <SwapBody>
-              <InputContainer0>
-                <TokenInput0
-                  value={tokenInput0}
-                  type="number"
-                  onChange={(e) => handleInput(e, 0)}
-                  placeholder="0.00"
-                />
-                <Max className="hover"> Max </Max>
-                <TokenSelect0>
-                  <img
-                    src={token0Metadata && token0Metadata.img}
-                    alt="token logo"
-                  />
-                  <p>{token0Metadata && token0Metadata.symbol}</p>
-                  <ArrowDropDownIcon className="icon" />
-                </TokenSelect0>
-              </InputContainer0>
-              <SwapHorizontalCircleOutlinedIcon
-                className="swap-icon"
-                style={{ transition: " all .3s" }}
-                onClick={(
-                  e: React.MouseEvent<SVGSVGElement, MouseEvent> | any
-                ) => {
-                  if (!isRotated) {
-                    e.target.style.transform = "rotate(180deg)";
-                    setIsRotated(true);
-                  }
-                  if (isRotated) {
-                    e.target.style.transform = "rotate(-180deg)";
-                    setIsRotated(false);
-                  }
-                }}
-              />
-              <InputContainer1>
-                <TokenInput1
-                  value={tokenInput1}
-                  type="number"
-                  onChange={(e) => handleInput(e, 1)}
-                  placeholder="0.00"
-                />
+    <React.Fragment>
+      <ModalContainer isShown={showTokenList}>
+        <TokenModal
+          closeModal={() => setShowTokenList(false)}
+          tokens={tokens}
+        />
+      </ModalContainer>
 
-                <TokenSelect1>
-                  <img
-                    src={token1Metadata && token1Metadata.img}
-                    alt="token logo"
+      <SwapContainer>
+        <SwapContent>
+          <SwapBox>
+            <SwapBoxInner>
+              <SwapHeader>
+                <h3>Swap</h3>
+                <div>
+                  <Tool className="hover">
+                    <AutorenewIcon />
+                  </Tool>
+                  <Tool className="hover">
+                    <SettingsIcon />
+                  </Tool>
+                  <Connect onClick={connectWallet}>
+                    {!account && <p>Connect</p>}
+                    {account && shortenAddress(account)}
+                    {/* <ArrowDropDownIcon className="connect" /> */}
+                  </Connect>
+                </div>
+              </SwapHeader>
+              <SwapBody>
+                <InputContainer0>
+                  <TokenInput0
+                    value={tokenInput0}
+                    type="number"
+                    onChange={(e) => handleInput(e, 0)}
+                    placeholder="0.00"
                   />
-                  <p>{token1Metadata && token1Metadata.symbol}</p>
-                  <ArrowDropDownIcon className="icon" />
-                </TokenSelect1>
-              </InputContainer1>
-              {renderSwapButton()}
-            </SwapBody>
-          </SwapBoxInner>
-          <DexPanel>
-            <DexPanelHeader>
-              <h3>Price Impact</h3>
-              <p>0.34</p>
-            </DexPanelHeader>
-            <DexPanelBody>
-              <DexList>
-                {tradeEntity &&
-                  tradeEntity.map((item: any, index: any, array: any) => {
-                    {
+                  <Max className="hover"> Max </Max>
+                  <TokenSelect0 onClick={() => setShowTokenList(true)}>
+                    <img
+                      src={token0Metadata && token0Metadata.img}
+                      alt="token logo"
+                    />
+                    <p>{token0Metadata && token0Metadata.symbol}</p>
+                    <ArrowDropDownIcon className="icon" />
+                  </TokenSelect0>
+                </InputContainer0>
+                <SwapHorizontalCircleOutlinedIcon
+                  className="swap-icon"
+                  style={{ transition: " all .3s" }}
+                  onClick={(
+                    e: React.MouseEvent<SVGSVGElement, MouseEvent> | any
+                  ) => {
+                    if (!isRotated) {
+                      e.target.style.transform = "rotate(180deg)";
+                      setIsRotated(true);
                     }
-                    return (
-                      <DexListItem>
-                        <div>
-                          <span>
-                            <img
-                              src="https://ethereum-optimism.github.io/logos/UNI.png"
-                              alt="logo"
-                            />
-                          </span>{" "}
-                          <p>{item[3].toUpperCase()}</p>
-                        </div>
-                        <Price color="green">
-                          <p>{parseFloat(item[0]).toFixed(5)}</p>{" "}
-                          <span>Best</span>
-                        </Price>
-                      </DexListItem>
-                    );
-                  })}
+                    if (isRotated) {
+                      e.target.style.transform = "rotate(-180deg)";
+                      setIsRotated(false);
+                    }
+                  }}
+                />
+                <InputContainer1>
+                  <TokenInput1
+                    value={tokenInput1}
+                    type="number"
+                    onChange={(e) => handleInput(e, 1)}
+                    placeholder="0.00"
+                  />
 
-                <DexListItem>
-                  <div>
-                    <span>
-                      <img
-                        src="https://ethereum-optimism.github.io/logos/UNI.png"
-                        alt="logo"
-                      />
-                    </span>{" "}
-                    Lydia
-                  </div>
-                  <Price color="red">
-                    <p>8195.4</p> <span>-0.321</span>
-                  </Price>
-                </DexListItem>
-              </DexList>
-            </DexPanelBody>
-          </DexPanel>
-        </SwapBox>
-      </SwapContent>
-    </SwapContainer>
+                  <TokenSelect1 onClick={() => setShowTokenList(true)}>
+                    <img
+                      src={token1Metadata && token1Metadata.img}
+                      alt="token logo"
+                    />
+                    <p>{token1Metadata && token1Metadata.symbol}</p>
+                    <ArrowDropDownIcon className="icon" />
+                  </TokenSelect1>
+                </InputContainer1>
+                {renderSwapButton()}
+              </SwapBody>
+            </SwapBoxInner>
+
+            {showDexList && tradeEntity && (
+              <DexPanel>
+                <DexPanelHeader>
+                  <h3>Source</h3>
+                  <p>Price</p>
+                </DexPanelHeader>
+                <DexPanelBody>
+                  <DexList>
+                    {tradeEntity.map((item: any, index: any, array: any) => {
+                      return (
+                        <DexListItem>
+                          <div>
+                            <span>
+                              <img src={getDexLogo(item[3])} alt="logo" />
+                            </span>{" "}
+                            <p>{item[3].toUpperCase()}</p>
+                          </div>
+                          {index === 0 ? (
+                            <Price color="green">
+                              <p>{parseFloat(item[0]).toFixed(5)}</p>{" "}
+                              <span>Best</span>
+                            </Price>
+                          ) : (
+                            <Price color="red">
+                              <p>{parseFloat(item[0]).toFixed(5)}</p>{" "}
+                              <span>
+                                {(
+                                  ((array[0][0] - item[0]) / array[0][0]) *
+                                  100
+                                ).toFixed(2)}
+                                %
+                              </span>
+                            </Price>
+                          )}
+                        </DexListItem>
+                      );
+                    })}
+                  </DexList>
+                </DexPanelBody>
+              </DexPanel>
+            )}
+          </SwapBox>
+        </SwapContent>
+      </SwapContainer>
+    </React.Fragment>
   );
 }
 
