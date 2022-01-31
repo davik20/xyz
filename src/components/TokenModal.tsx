@@ -9,6 +9,8 @@ import {
   amountToWei,
   amountToEther,
 } from "../utils/swap";
+import useSwap from "../context/UseSwap";
+import { on } from "events";
 const user: any = [];
 let i: any = 0;
 for (i; i < 20; i++) {
@@ -19,6 +21,7 @@ console.log(user);
 
 function TokenModal(props: any) {
   const { tokens, closeModal } = props;
+
   return (
     <Container>
       <Modal>
@@ -35,7 +38,10 @@ function TokenModal(props: any) {
               {}
             </TokenListHeading>
             <TokenListContent>
-              {tokens && tokens.map((token: any) => <Token token={token} />)}
+              {tokens &&
+                tokens.map((token: any, index: number) => (
+                  <Token onClose={closeModal} key={index} token={token} />
+                ))}
             </TokenListContent>
           </TokenList>
         </ModalBody>
@@ -46,8 +52,17 @@ function TokenModal(props: any) {
 
 const Token = (props: any) => {
   const { account, web3 }: any = useConnection();
+  const {
+    setTokens,
+    tokenSideSelected,
+    tokens,
+    setToken0Metadata,
+    setToken1Metadata,
+    setTradeTokens,
+    tradeTokens,
+  }: any = useSwap();
   console.log(web3);
-  const { token }: any = props;
+  const { token, onClose }: any = props;
 
   const [balance, setBalance] = useState<any>(0);
 
@@ -74,7 +89,20 @@ const Token = (props: any) => {
     }
   }, []);
   return (
-    <TokenListItem>
+    <TokenListItem
+      onClick={() => {
+        const tokensCopy = [...tradeTokens];
+
+        if (tokenSideSelected == 0) {
+          tokensCopy[0] = token;
+          setTradeTokens(tokensCopy);
+        } else {
+          tokensCopy[1] = token;
+          setTradeTokens(tokensCopy);
+        }
+        onClose();
+      }}
+    >
       <img src={token?.img} alt="logo" />
       <p className="name">{token?.name}</p>
       <p className="amount">{balance}</p>
@@ -94,7 +122,7 @@ const Container = styled.div`
 const Modal = styled.div`
   position: relative;
 
-  top: 10rem;
+  top: 7rem;
 `;
 
 const ModalHeader = styled.div`
@@ -157,7 +185,7 @@ const TokenListHeading = styled.div`
 `;
 
 const TokenListContent = styled.div`
-  height: 30rem;
+  height: 20rem;
   overflow-y: scroll;
   padding: 0 1.5rem 0 0;
 `;

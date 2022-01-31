@@ -3,7 +3,15 @@ import React from "react";
 
 function ModalContainer(props: any) {
   const { isShown } = props;
-  return <>{isShown && <Container>{props.children}</Container>}</>;
+  return (
+    <>
+      {isShown && (
+        <Container>
+          <div>{props.children}</div>
+        </Container>
+      )}
+    </>
+  );
 }
 
 const grow = keyframes`
@@ -16,8 +24,11 @@ const grow = keyframes`
 `;
 
 const Container = styled.div`
-  animation-name: ${grow};
-  animation-duration: 0.2s;
+  > div {
+    animation-name: ${grow};
+    animation-duration: 0.25s;
+  }
+
   color: white;
   position: fixed;
   background-color: #00000099;

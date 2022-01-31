@@ -26,12 +26,15 @@ function Swap() {
     tokens,
     RouterSdks,
     SDK,
-
+    tokenSideSelected,
+    setTokenSideSelected,
     token0Sdks,
     token1Sdks,
     token0Sdk,
     token1Sdk,
     isMultiPair,
+    tradeTokens,
+    setTradeTokens,
   }: any = useSwap();
   const [showDexList, setShowDexList] = useState<any>(false);
   const [showTokenList, setShowTokenList] = useState<any>(false);
@@ -330,7 +333,12 @@ function Swap() {
                     placeholder="0.00"
                   />
                   <Max className="hover"> Max </Max>
-                  <TokenSelect0 onClick={() => setShowTokenList(true)}>
+                  <TokenSelect0
+                    onClick={() => {
+                      setTokenSideSelected(0);
+                      setShowTokenList(true);
+                    }}
+                  >
                     <img
                       src={token0Metadata && token0Metadata.img}
                       alt="token logo"
@@ -348,11 +356,15 @@ function Swap() {
                     if (!isRotated) {
                       e.target.style.transform = "rotate(180deg)";
                       setIsRotated(true);
-                    }
-                    if (isRotated) {
+                    } else if (isRotated) {
                       e.target.style.transform = "rotate(-180deg)";
                       setIsRotated(false);
                     }
+                    console.log(tradeTokens);
+                    const token0 = tradeTokens[0];
+                    const token1 = tradeTokens[1];
+
+                    setTradeTokens([token1, token0]);
                   }}
                 />
                 <InputContainer1>
@@ -363,7 +375,12 @@ function Swap() {
                     placeholder="0.00"
                   />
 
-                  <TokenSelect1 onClick={() => setShowTokenList(true)}>
+                  <TokenSelect1
+                    onClick={() => {
+                      setTokenSideSelected(1);
+                      setShowTokenList(true);
+                    }}
+                  >
                     <img
                       src={token1Metadata && token1Metadata.img}
                       alt="token logo"

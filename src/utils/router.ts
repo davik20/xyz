@@ -13,6 +13,21 @@ import {
   Rounding as RoundingEth,
 } from "@uniswap/sdk";
 
+// import {
+//   ChainId as ChainIdSushi,
+//   WETH9 as BaseSushi,
+//   Fetcher as FetcherSushi,
+//   Route as RouteSushi,
+//   Trade as TradeSushi,
+//   TokenAmount as TokenAmountSushi,
+//   TradeType as TradeTypeSushi,
+//   Currency as CurrencySushi,
+//   Token as TokenSushi,
+//   Percent as PercentSushi,
+//   Fraction as FractionSushi,
+//   Rounding as RoundingSushi,
+// } from "@sushiswap/sdk";
+
 import {
   ChainId as ChainIdCanary,
   WAVAX as BaseCanary,
@@ -171,8 +186,8 @@ const traderJoeSdk = new RouterSdk(
 
 const sdks: any = {
   "0x1": {
-    quickSwap: uniswapSdk,
     uniswap: uniswapSdk,
+    // uniswap: uniswapSdk,
   },
   "0x3": {
     uniswap: uniswapSdk,

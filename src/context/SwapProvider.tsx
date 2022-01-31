@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, Fragment } from "react";
 import { getTokens, ROUTER_ADDRESS } from "../utils/constants";
 import {
   getSDK,
@@ -12,6 +12,7 @@ import { SwapContext } from "./UseSwap";
 
 import RouterAbi from "../contracts/RouterAbi.json";
 import { ethers } from "ethers";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 interface Props {
   children: JSX.Element;
@@ -20,6 +21,7 @@ interface Props {
 const SwapProvider: React.FC<Props> = ({ children }) => {
   console.log("swap provider");
   const { chainId, account, web3 }: any = useConnection();
+  const [tokenSideSelected, setTokenSideSelected] = useState(0);
   const [token0Metadata, setToken0Metadata] = useState<any>(null);
   const [token1Metadata, setToken1Metadata] = useState<any>(null);
   const [token0Sdk, setToken0Sdk] = useState<any>(null);
@@ -29,7 +31,17 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
   const [pairs, setPairs] = useState<any>(null);
   const [isMultiPair, setIsMultiPair] = useState<any>(false);
   const [pair, setPair] = useState<any>([]);
-  const tokens = useMemo<any>(() => getTokens(chainId), [chainId]);
+  const [updater, setUpdater] = useState(0);
+  // const tokens = useMemo(() => {
+  //   return getTokens(chainId);
+  // }, [chainId]);
+
+  const [tokens, setTokens] = useState(() => {
+    return getTokens(chainId);
+  });
+
+  const [tradeTokens, setTradeTokens] = useState(tokens.slice(0, 2));
+
   const [token0Contract, setToken0Contract] = useState<any>(null);
   const [token1Contract, setToken1Contract] = useState<any>(null);
   const [token0Balance, setToken0Balance] = useState<any>(null);
@@ -39,19 +51,20 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
   const RouterSdks: any = useMemo(() => getSDK(chainId, "uniswap"), [chainId]);
   console.log(RouterSdks);
   let provider = new ethers.providers.Web3Provider(web3.currentProvider);
+
   useEffect(() => {
-    if (tokens.length > 0) {
-      setToken0Metadata(tokens[0]);
-      setToken1Metadata(tokens[1]);
+    if (tradeTokens.length > 0) {
+      setToken0Metadata(tradeTokens[0]);
+      setToken1Metadata(tradeTokens[1]);
     }
     return () => {};
-  }, [tokens]);
+  }, [tradeTokens]);
 
   useEffect(() => {
     // Grab Tokens from the sdk
     // console.log(Object.keys(RouterSdks));
 
-    if (tokens.length > 0 && chainId && RouterSdks) {
+    if (tradeTokens.length > 0 && chainId && RouterSdks) {
       try {
         const functions = [];
         let i: any;
@@ -62,19 +75,19 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
             fetchTokenData(
               RouterSdks[i].Fetcher,
               chainId,
-              tokens[0].address,
+              tradeTokens[0].address,
               provider,
-              tokens[0].symbol,
-              tokens[0].name
+              tradeTokens[0].symbol,
+              tradeTokens[0].name
             ),
 
             fetchTokenData(
               RouterSdks[i].Fetcher,
               chainId,
-              tokens[1].address,
+              tradeTokens[1].address,
               provider,
-              tokens[1].symbol,
-              tokens[1].name
+              tradeTokens[1].symbol,
+              tradeTokens[1].name
             ),
           ]);
         }
@@ -89,7 +102,7 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
             .then((result: any) => {
               console.log(index, Object.keys(RouterSdks)[index]);
 
-              console.log("Inseid promise ", index);
+              console.log("Inside promise ", index);
               const [token0, token1] = result;
               if (token0.status === "fulfilled") {
                 setToken0Sdks((prev: any) => {
@@ -121,7 +134,7 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
         console.log("Error at grabbing token sdk ", error);
       }
     }
-  }, [tokens, chainId, RouterSdks]);
+  }, [updater, tradeTokens, chainId, RouterSdks]);
 
   useEffect(() => {
     // get pair
@@ -146,6 +159,7 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
 
   useEffect(() => {
     if (token0Metadata) {
+      console.log("Rerendering");
       const contract = getTokenContract(token0Metadata, web3);
       if (contract && account) {
         const balance = getBalance(contract, account)
@@ -159,7 +173,7 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
       }
       setToken0Contract(contract);
     }
-  }, [token0Metadata, account]);
+  }, [token0Metadata, account, web3]);
 
   useEffect(() => {
     if (token1Metadata) {
@@ -177,7 +191,7 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
       console.log(contract);
       setToken1Contract(contract);
     }
-  }, [token1Metadata]);
+  }, [token1Metadata, account]);
 
   // for getting pair
   const getPairs: any = async (token0Sdks: any, token1Sdks: any) => {
@@ -296,44 +310,39 @@ const SwapProvider: React.FC<Props> = ({ children }) => {
 
   // for getting use balance
 
-  return useMemo(() => {
-    return (
-      <SwapContext.Provider
-        value={{
-          tokens,
-          token0Metadata,
-          token1Metadata,
-          pair,
-          RouterSdks,
-          token0Sdk,
-          token1Sdk,
-          token0Contract,
-          token1Contract,
-          isMultiPair,
-          pairs,
-          token0Sdks,
-          token1Sdks,
-        }}
-      >
-        {children}
-      </SwapContext.Provider>
-    );
-  }, [
-    tokens,
-    token0Metadata,
-    token1Metadata,
-    pair,
-    RouterSdks,
-    token0Sdk,
-    token1Sdk,
-    children,
-    token0Contract,
-    token1Contract,
-    isMultiPair,
-    pairs,
-    token0Sdks,
-    token1Sdks,
-  ]);
+  return (
+    <div>
+      {tokens.length > 0 && (
+        <SwapContext.Provider
+          value={{
+            tokens,
+            setTokens,
+            tokenSideSelected,
+            setTokenSideSelected,
+            setToken0Metadata,
+            setToken1Metadata,
+            setUpdater,
+            setTradeTokens,
+            tradeTokens,
+            token0Metadata,
+            token1Metadata,
+            pair,
+            RouterSdks,
+            token0Sdk,
+            token1Sdk,
+            token0Contract,
+            token1Contract,
+            isMultiPair,
+            pairs,
+            token0Sdks,
+            token1Sdks,
+          }}
+        >
+          {children}
+        </SwapContext.Provider>
+      )}
+    </div>
+  );
 };
 
 export default SwapProvider;

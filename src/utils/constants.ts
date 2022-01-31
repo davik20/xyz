@@ -184,18 +184,20 @@ const Tokens: any = (chainId: any) => {
 export const getTokens = (chainId: any) => {
   console.log("getting new tokens based on chain id");
   if (chainId) {
+    console.log(chainId);
     try {
       const tokens = Tokens(chainId);
       if (!tokens) {
         throw "Chain Id not present";
       }
+      console.log(tokens);
       return tokens;
     } catch (error) {
       console.log(error);
-      return [];
+      return ["davi"];
     }
   } else {
-    return [];
+    return [""];
   }
 };
 
@@ -203,6 +205,8 @@ export const dexLogos: any = {
   pangolin: "https://pangolin.exchange/logo.svg",
   "trader Joe": "https://www.traderjoexyz.com/static/media/logo.bc60f78d.png",
   elk: "https://app.elk.finance/static/media/icon.87da5a76.svg",
+  uniswap:
+    "https://cloudflare-ipfs.com/ipfs/QmXttGpZrECX5qCyXbBQiqgQNytVGeZW5Anewvh2jc4psg/",
 };
 
 export const ROUTER_ADDRESS = "0x7a250d5630b4cf539739df2c5dacb4c659f2488d";
