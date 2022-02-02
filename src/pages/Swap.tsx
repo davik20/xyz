@@ -363,7 +363,7 @@ function Swap() {
                     console.log(tradeTokens);
                     const token0 = tradeTokens[0];
                     const token1 = tradeTokens[1];
-                    //dd
+
                     setTradeTokens([token1, token0]);
                   }}
                 />
